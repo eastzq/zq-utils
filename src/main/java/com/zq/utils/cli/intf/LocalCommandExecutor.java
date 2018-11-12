@@ -1,6 +1,6 @@
-package com.zq.runnablejar.intf;
+package com.zq.utils.cli.intf;
 
-import com.zq.runnablejar.ExecuteResult;
+import com.zq.utils.cli.ExecuteResult;
 
 public interface LocalCommandExecutor {
     ExecuteResult executeCommand(String command, long timeout);

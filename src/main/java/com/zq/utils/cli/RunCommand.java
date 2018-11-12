@@ -1,4 +1,4 @@
-package com.zq.runnablejar;
+package com.zq.utils.cli;
 
 import java.io.BufferedReader;
 import java.io.IOException;

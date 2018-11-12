@@ -1,4 +1,4 @@
-package com.zq.runnablejar;
+package com.zq.utils.cli;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +9,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zq.runnablejar.intf.LocalCommandExecutor;
+import com.zq.utils.cli.intf.LocalCommandExecutor;
 
 public class RuntimeUtils2 {
 

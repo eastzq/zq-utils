@@ -3,9 +3,9 @@ package test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zq.runnablejar.ExecuteResult;
-import com.zq.runnablejar.LocalCommandExecutorImpl;
-import com.zq.runnablejar.intf.LocalCommandExecutor;
+import com.zq.utils.cli.ExecuteResult;
+import com.zq.utils.cli.LocalCommandExecutorImpl;
+import com.zq.utils.cli.intf.LocalCommandExecutor;
 
 public class RuntimeUtils2 {
 
