@@ -1,9 +1,11 @@
-package com.zq.utils.cli;
+package com.zq.utils.test.cli;
 
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zq.utils.cli.ExecuteResult;
+import com.zq.utils.cli.LocalCommandExecutorImpl;
 import com.zq.utils.cli.intf.LocalCommandExecutor;
 
 public class RuntimeUtils2 {
@@ -31,13 +33,9 @@ public class RuntimeUtils2 {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		BasicConfigurator.configure();
-
-		logger.debug("heelo");
-
 		LocalCommandExecutor ec = new LocalCommandExecutorImpl();
-		ExecuteResult er = ec.executeCommand("cmd /c mvn -v", 3000);
-		System.out.println(er.getExecuteOut());
+		ExecuteResult er = ec.executeCommand("cmd /c git -v", 3000);
+		logger.debug("执行结果打印：\n {}",er.getExecuteOut());
 	}
 
 }

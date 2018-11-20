@@ -1,4 +1,4 @@
-package com.zq.utils.cli;
+package com.zq.utils.test.cli;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

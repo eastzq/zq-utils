@@ -46,7 +46,7 @@ public class StreamGobbler extends Thread {
 				this.buf.append(line + "\n");
 			}
 		} catch (IOException ex) {
-			logger.trace("Failed to successfully consume and display the input stream of type " + streamType + ".", ex);
+			logger.debug("Failed to successfully consume and display the input stream of type " + streamType + ".", ex);
 		} finally {
 			this.isStopped = true;
 			synchronized (this) {
