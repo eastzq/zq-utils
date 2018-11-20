@@ -34,7 +34,7 @@ public class RuntimeUtils2 {
 //			e.printStackTrace();
 //		}
 		LocalCommandExecutor ec = new LocalCommandExecutorImpl();
-		ExecuteResult er = ec.executeCommand("cmd /c git -v", 3000);
+		ExecuteResult er = ec.executeCommand("mvn -v", 3000);
 		logger.debug("执行结果打印：\n {}",er.getExecuteOut());
 	}
 
