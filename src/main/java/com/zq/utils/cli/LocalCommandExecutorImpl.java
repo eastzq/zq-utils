@@ -1,6 +1,7 @@
 package com.zq.utils.cli;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
@@ -28,7 +29,7 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 			new SynchronousQueue<Runnable>());
 
 	@Override
-	public ExecuteResult executeCommand(String command, long timeout) {
+	public ExecuteResult executeCommand(String command, long timeout, String[] envp, File dir) {
 		if (!command.contains(cmdPrefix)) {
 			command = cmdPrefix + " /c " +command;
 		}
@@ -40,7 +41,7 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 		Future<Integer> executeFuture = null;
 		try {
 			logger.info("开始执行命令：{}", command.toString());
-			process = Runtime.getRuntime().exec(command);
+			process = Runtime.getRuntime().exec(command,envp,dir);
 			final Process p = process;
 
 			// close process's output stream.
@@ -125,5 +126,10 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 		} catch (IOException e) {
 			logger.error("exception", e);
 		}
+	}
+
+	@Override
+	public ExecuteResult executeCommand(String command, long timeout) {
+		return executeCommand(command, timeout, null, null);
 	}
 }
