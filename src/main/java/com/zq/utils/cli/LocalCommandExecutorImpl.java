@@ -22,14 +22,16 @@ import com.zq.utils.cli.intf.LocalCommandExecutor;
 
 public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 
-	static final Logger logger = LoggerFactory.getLogger(LocalCommandExecutorImpl.class);
-
-	static ExecutorService pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 3L, TimeUnit.SECONDS,
+	public static final Logger logger = LoggerFactory.getLogger(LocalCommandExecutorImpl.class);
+	public static final String cmdPrefix = "cmd";
+	public static ExecutorService pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 3L, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
 
 	@Override
 	public ExecuteResult executeCommand(String command, long timeout) {
-		
+		if (!command.contains(cmdPrefix)) {
+			command = cmdPrefix + " /c " +command;
+		}
 		Process process = null;
 		InputStream pIn = null;
 		InputStream pErr = null;
@@ -37,7 +39,7 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 		StreamGobbler errorGobbler = null;
 		Future<Integer> executeFuture = null;
 		try {
-			logger.info("开始执行命令：{}",command.toString());
+			logger.info("开始执行命令：{}", command.toString());
 			process = Runtime.getRuntime().exec(command);
 			final Process p = process;
 
@@ -65,13 +67,13 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 			executeFuture = pool.submit(call);
 			int exitCode = executeFuture.get(timeout, TimeUnit.MILLISECONDS);
 			String retMsg = "";
-			
-			if(exitCode == 0) {
+
+			if (exitCode == 0) {
 				retMsg = outputGobbler.getContent();
-			}else {
+			} else {
 				retMsg = errorGobbler.getContent();
 			}
-			return new ExecuteResult(exitCode,retMsg);
+			return new ExecuteResult(exitCode, retMsg);
 
 		} catch (IOException ex) {
 			String errorMessage = "The command [" + command + "] execute failed.";
