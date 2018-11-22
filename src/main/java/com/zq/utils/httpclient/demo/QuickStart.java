@@ -53,7 +53,7 @@ public class QuickStart {
 		System.out.println(response1.getStatusLine().getStatusCode());
 		System.out.println(response1.getStatusLine().getReasonPhrase());
 		System.out.println(response1.getStatusLine().toString());
-
+		
 		// 返回头
 		HttpResponse response = new BasicHttpResponse(HttpVersion.HTTP_1_1, HttpStatus.SC_OK, "OK");
 		response.addHeader("Set-Cookie", "c1=a; path=/; domain=localhost");
