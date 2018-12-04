@@ -2,9 +2,10 @@ package com.zq.utils.httpclient.demo;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -30,12 +31,18 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.zq.utils.cli.LocalCommandExecutorImpl;
 
 public class QuickStart {
 	public static final Logger logger = LoggerFactory.getLogger(LocalCommandExecutorImpl.class);
 
 	public static void main(String[] args) throws ClientProtocolException, IOException {
+		Map map1 = new HashMap();
+
+		map1.put("hello", "1");
+		Map map2 = new HashMap(map1);
+		System.out.println(JSON.toJSONString(map2));
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet("https://www.baidu.com/");
 		CloseableHttpResponse response1 = httpclient.execute(httpGet);
