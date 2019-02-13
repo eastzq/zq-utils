@@ -2,6 +2,7 @@ package com.zq.utils.concurrent.base;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class Base{
 		@Override
 		public Boolean call() throws Exception{
 			logger.debug("实现Callable接口！");
+			Thread.sleep(5000);
 			return true;
 		}
 	}
@@ -50,10 +52,11 @@ public class Base{
         Thread t2 = new Thread(ft);
         t2.start();
         try {
-            Boolean sum = ft.get(); //FutureTask 可用于闭锁
+            Boolean sum = ft.get(500,TimeUnit.MILLISECONDS); //FutureTask 可用于闭锁
             System.out.println(sum);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
+			// TODO: handle exception
+        	e.printStackTrace();
+		}
 	}
 }

@@ -17,7 +17,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.spi.ErrorCode;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -80,15 +79,12 @@ public class Configuration {
 	 * 从JSON字符串加载Configuration
 	 */
 	public static Configuration from(String json) {
-		json = StrUtil.replaceVariable(json);
 		checkJSON(json);
-
 		try {
 			return new Configuration(json);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	/**
@@ -130,7 +126,7 @@ public class Configuration {
 		return Configuration.from(Configuration.toJSONString(object));
 	}
 
-	public String getNecessaryValue(String key, ErrorCode errorCode) {
+	public String getNecessaryValue(String key) {
 		String value = this.getString(key, null);
 		if (StringUtils.isBlank(value)) {
 			throw new RuntimeException(String.format("您提供配置文件有误，[%s]是必填参数，不允许为空或者留白 .", key));
@@ -139,7 +135,7 @@ public class Configuration {
 		return value;
 	}
 
-	public String getUnnecessaryValue(String key, String defaultValue, ErrorCode errorCode) {
+	public String getUnnecessaryValue(String key, String defaultValue) {
 		String value = this.getString(key, defaultValue);
 		if (StringUtils.isBlank(value)) {
 			value = defaultValue;
@@ -147,7 +143,7 @@ public class Configuration {
 		return value;
 	}
 
-	public Boolean getNecessaryBool(String key, ErrorCode errorCode) {
+	public Boolean getNecessaryBool(String key) {
 		Boolean value = this.getBool(key);
 		if (value == null) {
 			throw new RuntimeException(String.format("您提供配置文件有误，[%s]是必填参数，不允许为空或者留白 .", key));
