@@ -1,6 +1,7 @@
 package com.zq.utils.concurrent.base;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
@@ -20,14 +21,15 @@ public class Base{
 		@Override
 		public Boolean call() throws Exception{
 			logger.debug("实现Callable接口！");
-			Thread.sleep(5000);
+			int i =  1/0;
+			Thread.sleep(1000);
 			return true;
 		}
 	}
 	
 	
 	public static void main(String[] args) throws Exception {
-		for(int i =0;i<10;i++) {
+		for(int i =0;i<2;i++) {
 			test2();			
 		}
 		logger.debug("main 线程结束");
@@ -54,9 +56,12 @@ public class Base{
         try {
             Boolean sum = ft.get(500,TimeUnit.MILLISECONDS); //FutureTask 可用于闭锁
             System.out.println(sum);
-        } catch (Exception e) {
+        } catch (ExecutionException e) {
 			// TODO: handle exception
-        	e.printStackTrace();
+        	Throwable t =  e.getCause();
+        	t.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
