@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.zq</groupId>
-	<artifactId>zq-utils</artifactId>
+	<artifactId>utils</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>zq-utils</name>
+	<name>utils</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
