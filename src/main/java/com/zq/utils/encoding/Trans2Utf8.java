@@ -22,7 +22,7 @@ public class Trans2Utf8 {
 			if (file.isDirectory()) {
 				transferFile(file.getCanonicalPath());
 			} else {
-				if (name.contains(".java") || name.contains(".properties") || name.contains(".xml")) {
+				if (name.contains(".java") || name.contains(".properties") || name.contains(".xml") || name.contains(".js")) {
 					readAndWrite(file);
 					System.out.println(name + " has converted to utf8 ");
 				}
@@ -37,7 +37,7 @@ public class Trans2Utf8 {
 
 	public static void main(String[] args) throws Exception {
 		// 程序入口，制定src的path
-		String path = "C:\\Users\\zhide\\Desktop\\message";
+		String path = "C:\\Users\\zhide\\Desktop\\自动清算\\auto-clear\\lib\\ext\\新建文件夹";
 		transferFile(path);
 	}
 
