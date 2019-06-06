@@ -104,6 +104,7 @@ public class CommServlet extends HttpServlet {
 				Throwable ei = ((InvocationTargetException) e).getTargetException();
 				logger.error("执行服务方法出现异常！", ei.toString());
 				rpcResult = RpcResult.error("执行服务方法出现异常！原因：" + ei.toString());
+				service.setRaw(false);
 			} else {
 				logger.error("RPC调用异常", e);
 				rpcResult = RpcResult.error(e.toString());

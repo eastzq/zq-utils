@@ -24,7 +24,7 @@ public class ServiceRegCenter {
 	
 	public static BaseService getService(String key) throws RpcInvokeException {
 		logger.debug("正在查找服务{}",key);
-		Class<? extends BaseService> clazz =  service_class.get("CommandService");
+		Class<? extends BaseService> clazz =  service_class.get(key);
 		if(clazz==null) {
 			throw new RpcInvokeException("目标服务不存在！serviceName="+key);
 		}
