@@ -61,8 +61,9 @@ public class CommServlet extends HttpServlet {
 			super.service(request, response);
 		} finally {
 			HttpServletRequest httpreq = (HttpServletRequest) request;
-			logger.info("服务处理地址[{}]参数[{}]耗时[{}]秒", httpreq.getRequestURI(), httpreq.getRemoteAddr(),
+			logger.info("服务处理地址[{}]参数[{}]耗时[{}]秒", httpreq.getRequestURL(),httpreq.getRemoteAddr(),
 					(double) (System.currentTimeMillis() - start_time) / 1000);
+			
 		}
 	}
 
