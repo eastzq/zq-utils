@@ -30,10 +30,32 @@ public class StringResort {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String md5String = MD5Util.MD5Encode(test);
-		String t = resortString(md5String);
-		logger.debug(md5String);
-		logger.debug(t);
+		logger.debug(bytesToHexString(new byte[] {1,2,3,4,123,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}));
+	}
+
+	/**
+	 * 字节数组转16进制输出！
+	 * @param src
+	 * @return
+	 */
+	public static String bytesToHexString(byte[] src) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("\n");
+		if (src == null || src.length <= 0) {
+			return null;
+		}
+		for (int i = 0; i < src.length; i++) {
+			int v = src[i] & 0xFF;
+			String hv = Integer.toHexString(v);
+			if (hv.length() < 2) {
+				stringBuilder.append(0);
+			}
+			stringBuilder.append(hv+" ");
+			if((i+1)%10 ==0) {
+				stringBuilder.append("\n");
+			}
+		}
+		return stringBuilder.toString();
 	}
 
 }
