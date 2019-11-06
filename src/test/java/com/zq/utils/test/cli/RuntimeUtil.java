@@ -9,7 +9,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -302,12 +307,27 @@ public class RuntimeUtil {
 		public void onExit(StringReader result, String[] envp, File dir, String[] startCommand, String[]... commands);
 	}
 
-	public static void main(String[] args) {
-		// 例子 ps -ef (注意用String[]方式来表示命令是不需要做转移的)
-		System.out.println(readStringReader(run(null, null, new String[] { "ps", "-ef" }), true));
-		System.out.println("-----------------------------------------------------------------");
-		// 例子 ps -ef | grep -i java
-		System.out.println(readStringReader(
-				run(null, null, new String[] { "ps", "-ef" }, new String[] { "grep", "-i", "java" }), true));
+	public static void main(String[] args) throws URISyntaxException {
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		df.format(new Date());
+		System.out.println(df.format(new Date()));
+		
+		System.out.println(appendUri("http://lcoalakfj:1112/adf/adf/adf", "a=张三"));
+	}
+	
+	public static URI appendUri(String uri, String appendQuery) throws URISyntaxException  {
+		URI oldUri = new URI(uri);
+
+		String newQuery = oldUri.getQuery();
+		if (newQuery == null) {
+			newQuery = appendQuery;
+		} else {
+			newQuery += "&" + appendQuery;
+		}
+
+		URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery,
+				oldUri.getFragment());
+
+		return newUri;
 	}
 }
