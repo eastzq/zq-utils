@@ -20,11 +20,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zq.utils.cli.intf.LocalCommandExecutor;
+import com.zq.utils.cli.intf.CommandExecutor;
 
-public class LocalCommandExecutorImpl implements LocalCommandExecutor {
+public class RuntimeCommandExecutorImpl implements CommandExecutor {
 
-	public static final Logger logger = LoggerFactory.getLogger(LocalCommandExecutorImpl.class);
+	public static final Logger logger = LoggerFactory.getLogger(RuntimeCommandExecutorImpl.class);
 
 	public static final String cmdPrefix = "cmd";
 
@@ -41,7 +41,7 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 
 	private String encoding = "UTF-8";
 
-	public LocalCommandExecutorImpl(String encoding) {
+	public RuntimeCommandExecutorImpl(String encoding) {
 		if (StringUtils.isNoneBlank(encoding)) {
 			this.encoding = encoding;
 		}
@@ -87,7 +87,7 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 			executeFuture = pool.submit(call);
 			int exitCode = executeFuture.get(timeout, TimeUnit.MILLISECONDS);
 			String retMsg = "";
-
+			logger.info("执行结果为：{}",exitCode);
 			if (exitCode == 0) {
 				retMsg = outputGobbler.getContent();
 			} else {

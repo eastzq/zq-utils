@@ -3,9 +3,10 @@ package com.zq.utils.test.cli;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.zq.utils.cli.ExecuteResult;
-import com.zq.utils.cli.LocalCommandExecutorImpl;
-import com.zq.utils.cli.intf.LocalCommandExecutor;
+import com.zq.utils.cli.ProcessBuilderCommandExecutorImpl;
+import com.zq.utils.cli.intf.CommandExecutor;
 
 public class RuntimeUtils2 {
 
@@ -33,9 +34,10 @@ public class RuntimeUtils2 {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		LocalCommandExecutor ec = new LocalCommandExecutorImpl("GBK");
+		CommandExecutor ec = new ProcessBuilderCommandExecutorImpl("GBK");
 		ExecuteResult er = ec.executeCommand("git st", 1000);
-		logger.debug("执行结果打印：\n {}", er.getExecuteOut());
+		logger.debug(er.getExecuteOut());
+		logger.debug("执行结果打印：{}", JSON.toJSONString(er));
 	}
 
 }
