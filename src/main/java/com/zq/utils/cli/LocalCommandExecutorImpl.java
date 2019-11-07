@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang3.StringUtils;
 /**
 * LocalCommandExecutorImpl.java
 */
@@ -24,14 +25,32 @@ import com.zq.utils.cli.intf.LocalCommandExecutor;
 public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 
 	public static final Logger logger = LoggerFactory.getLogger(LocalCommandExecutorImpl.class);
+
 	public static final String cmdPrefix = "cmd";
+
+	public static boolean isWindows() {
+		String os = System.getProperty("os.name");
+		if (os.toLowerCase().startsWith("win")) {
+			return true;
+		}
+		return false;
+	}
+
 	public static ExecutorService pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 3L, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
 
+	private String encoding = "UTF-8";
+
+	public LocalCommandExecutorImpl(String encoding) {
+		if (StringUtils.isNoneBlank(encoding)) {
+			this.encoding = encoding;
+		}
+	}
+
 	@Override
 	public ExecuteResult executeCommand(String command, long timeout, String[] envp, File dir) {
-		if (!command.contains(cmdPrefix)) {
-			command = cmdPrefix + " /c " +command;
+		if (isWindows() && !command.contains(cmdPrefix)) {
+			command = cmdPrefix + " /c " + command;
 		}
 		Process process = null;
 		InputStream pIn = null;
@@ -41,18 +60,18 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 		Future<Integer> executeFuture = null;
 		try {
 			logger.info("开始执行命令：{}", command.toString());
-			process = Runtime.getRuntime().exec(command,envp,dir);
+			process = Runtime.getRuntime().exec(command, envp, dir);
 			final Process p = process;
 
 			// close process's output stream.
 			p.getOutputStream().close();
 
 			pIn = process.getInputStream();
-			outputGobbler = new StreamGobbler(pIn, "OUTPUT");
+			outputGobbler = new StreamGobbler(pIn, "OUTPUT",encoding);
 			outputGobbler.start();
 
 			pErr = process.getErrorStream();
-			errorGobbler = new StreamGobbler(pErr, "ERROR");
+			errorGobbler = new StreamGobbler(pErr, "ERROR",encoding);
 			errorGobbler.start();
 
 			// create a Callable for the command's Process which can be called by an
@@ -79,20 +98,23 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 		} catch (IOException ex) {
 			String errorMessage = "The command [" + command + "] execute failed.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-1, null);
+			return new ExecuteResult(-999, "IO异常，原因：" + ex.getMessage());
 		} catch (TimeoutException ex) {
 			String errorMessage = "The command [" + command + "] timed out.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-1, null);
+			return new ExecuteResult(-999, "命令执行超时，原因：" + ex.getMessage());
 		} catch (ExecutionException ex) {
 			String errorMessage = "The command [" + command + "] did not complete due to an execution error.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-1, null);
+			return new ExecuteResult(-999, "执行命令异常：原因：" + ex.getMessage());
 		} catch (InterruptedException ex) {
 			String errorMessage = "The command [" + command + "] did not complete due to an interrupted error.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-1, null);
+			return new ExecuteResult(-999, "中断异常：原因：" + ex.getMessage());
 		} finally {
+			if (process != null) {
+				process.destroy();
+			}
 			if (executeFuture != null) {
 				try {
 					executeFuture.cancel(true);
@@ -112,9 +134,6 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 					errorGobbler.interrupt();
 				}
 			}
-			if (process != null) {
-				process.destroy();
-			}
 		}
 	}
 
@@ -132,4 +151,5 @@ public class LocalCommandExecutorImpl implements LocalCommandExecutor {
 	public ExecuteResult executeCommand(String command, long timeout) {
 		return executeCommand(command, timeout, null, null);
 	}
+
 }

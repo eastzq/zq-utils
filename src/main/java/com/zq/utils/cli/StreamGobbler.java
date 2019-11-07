@@ -17,14 +17,16 @@ public class StreamGobbler extends Thread {
 	private String streamType;
 	private StringBuilder buf;
 	private volatile boolean isStopped = false;
-
+	private String encoding;	
+	
 	/**
 	 * @param inputStream
 	 *            the InputStream to be consumed
 	 * @param streamType
 	 *            the stream type (should be OUTPUT or ERROR)
 	 */
-	public StreamGobbler(final InputStream inputStream, final String streamType) {
+	public StreamGobbler(final InputStream inputStream, final String streamType,String encoding) {
+		this.encoding=encoding;
 		this.inputStream = inputStream;
 		this.streamType = streamType;
 		this.buf = new StringBuilder();
@@ -39,7 +41,7 @@ public class StreamGobbler extends Thread {
 	public void run() {
 		try {
 			// 默认编码为UTF-8，这里设置编码为GBK，因为WIN7的编码为GBK
-			InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "GBK");
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream, encoding);
 			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 			String line = null;
 			while ((line = bufferedReader.readLine()) != null) {

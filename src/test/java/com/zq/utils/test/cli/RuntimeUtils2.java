@@ -1,6 +1,5 @@
 package com.zq.utils.test.cli;
 
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +10,7 @@ import com.zq.utils.cli.intf.LocalCommandExecutor;
 public class RuntimeUtils2 {
 
 	private static Logger logger = LoggerFactory.getLogger(RuntimeUtils2.class);
+
 	public static void main(String[] args) {
 //		Runtime runtime = Runtime.getRuntime();
 //		try {
@@ -33,9 +33,9 @@ public class RuntimeUtils2 {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		LocalCommandExecutor ec = new LocalCommandExecutorImpl();
-		ExecuteResult er = ec.executeCommand("mvn -v", 3000);
-		logger.debug("执行结果打印：\n {}",er.getExecuteOut());
+		LocalCommandExecutor ec = new LocalCommandExecutorImpl("GBK");
+		ExecuteResult er = ec.executeCommand("git st", 1000);
+		logger.debug("执行结果打印：\n {}", er.getExecuteOut());
 	}
 
 }
