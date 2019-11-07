@@ -67,11 +67,11 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 			p.getOutputStream().close();
 
 			pIn = process.getInputStream();
-			outputGobbler = new StreamGobbler(pIn, "OUTPUT",encoding);
+			outputGobbler = new StreamGobbler(pIn, "OUTPUT", encoding);
 			outputGobbler.start();
 
 			pErr = process.getErrorStream();
-			errorGobbler = new StreamGobbler(pErr, "ERROR",encoding);
+			errorGobbler = new StreamGobbler(pErr, "ERROR", encoding);
 			errorGobbler.start();
 
 			// create a Callable for the command's Process which can be called by an
@@ -87,7 +87,7 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 			executeFuture = pool.submit(call);
 			int exitCode = executeFuture.get(timeout, TimeUnit.MILLISECONDS);
 			String retMsg = "";
-			logger.info("执行结果为：{}",exitCode);
+			logger.info("执行结果为：{}", exitCode);
 			if (exitCode == 0) {
 				retMsg = outputGobbler.getContent();
 			} else {
@@ -152,4 +152,8 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 		return executeCommand(command, timeout, null, null);
 	}
 
+	@Override
+	public ExecuteResult executeCommand(String command) {
+		return executeCommand(command, Long.MAX_VALUE);
+	}
 }

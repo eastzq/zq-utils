@@ -145,4 +145,9 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 		return executeCommand(command, timeout, null, null);
 	}
 
+	@Override
+	public ExecuteResult executeCommand(String command) {
+		return executeCommand(command,Long.MAX_VALUE);
+	}
+
 }
