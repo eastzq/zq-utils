@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -48,10 +49,14 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 	}
 
 	@Override
-	public ExecuteResult executeCommand(String command, long timeout, String[] envp, File dir) {
+	public ExecuteResult executeCommand(String[] cmdarray, long timeout, String[] envp, File dir) {
+		String command = StringUtils.join(cmdarray, " ");
 		if (isWindows() && !command.contains(cmdPrefix)) {
 			command = cmdPrefix + " /c " + command;
+			String[] f = new String[] { cmdPrefix, "/c", };
+			cmdarray = concat(f, cmdarray);
 		}
+
 		Process process = null;
 		InputStream pIn = null;
 		InputStream pErr = null;
@@ -60,7 +65,7 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 		Future<Integer> executeFuture = null;
 		try {
 			logger.info("开始执行命令：{}", command.toString());
-			process = Runtime.getRuntime().exec(command, envp, dir);
+			process = Runtime.getRuntime().exec(cmdarray, envp, dir);
 			final Process p = process;
 
 			// close process's output stream.
@@ -149,11 +154,37 @@ public class RuntimeCommandExecutorImpl implements CommandExecutor {
 
 	@Override
 	public ExecuteResult executeCommand(String command, long timeout) {
-		return executeCommand(command, timeout, null, null);
+		return executeCommand(splitCommand(command), timeout, null, null);
 	}
 
 	@Override
 	public ExecuteResult executeCommand(String command) {
 		return executeCommand(command, Long.MAX_VALUE);
 	}
+
+	public static String[] concat(String[] a, String[] b) {
+		String[] c = new String[a.length + b.length];
+		System.arraycopy(a, 0, c, 0, a.length);
+		System.arraycopy(b, 0, c, a.length, b.length);
+		return c;
+	}
+
+	public static String[] splitCommand(String command) {
+		StringTokenizer st = new StringTokenizer(command);
+		String[] cmdarray = new String[st.countTokens()];
+		for (int i = 0; st.hasMoreTokens(); i++)
+			cmdarray[i] = st.nextToken();
+		return cmdarray;
+	}
+
+	@Override
+	public ExecuteResult executeCommand(String[] cmdarray, long timeout) {
+		return executeCommand(cmdarray, timeout, null, null);
+	}
+
+	@Override
+	public ExecuteResult executeCommand(String[] cmdarray) {
+		return executeCommand(cmdarray, Long.MAX_VALUE, null, null);
+	}
+
 }

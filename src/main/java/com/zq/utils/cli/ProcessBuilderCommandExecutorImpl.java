@@ -1,12 +1,9 @@
 package com.zq.utils.cli;
 
-import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -51,22 +48,19 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 	}
 
 	@Override
-	public ExecuteResult executeCommand(String command, long timeout, String[] envp, File dir) {
+	public ExecuteResult executeCommand(String[] cmdarray, long timeout, String[] envp, File dir) {
+		String command = StringUtils.join(cmdarray, " ");
 		if (isWindows() && !command.contains(cmdPrefix)) {
 			command = cmdPrefix + " /c " + command;
+			String[] f = new String[] { cmdPrefix, "/c", };
+			cmdarray = RuntimeCommandExecutorImpl.concat(f, cmdarray);
 		}
 		Process process = null;
 		InputStream pIn = null;
-		InputStream pErr = null;
 		StreamGobbler outputGobbler = null;
 		Future<Integer> executeFuture = null;
 		try {
 			logger.info("开始执行命令：{}", command.toString());
-			StringTokenizer st = new StringTokenizer(command);
-			String[] cmdarray = new String[st.countTokens()];
-			for (int i = 0; st.hasMoreTokens(); i++)
-				cmdarray[i] = st.nextToken();
-
 			ProcessBuilder processBuilder = new ProcessBuilder(cmdarray);
 			if (dir != null && dir.exists()) {
 				processBuilder.directory(dir);
@@ -86,7 +80,6 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 					return p.exitValue();
 				}
 			};
-
 			// submit the command's call and get the result from a
 			executeFuture = pool.submit(call);
 			int exitCode = executeFuture.get(timeout, TimeUnit.MILLISECONDS);
@@ -142,12 +135,22 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 
 	@Override
 	public ExecuteResult executeCommand(String command, long timeout) {
-		return executeCommand(command, timeout, null, null);
+		return executeCommand(RuntimeCommandExecutorImpl.splitCommand(command), timeout, null, null);
 	}
 
 	@Override
 	public ExecuteResult executeCommand(String command) {
-		return executeCommand(command,Long.MAX_VALUE);
+		return executeCommand(command, Long.MAX_VALUE);
+	}
+
+	@Override
+	public ExecuteResult executeCommand(String[] cmdarray, long timeout) {
+		return executeCommand(cmdarray, timeout, null, null);
+	}
+
+	@Override
+	public ExecuteResult executeCommand(String[] cmdarray) {
+		return executeCommand(cmdarray, Long.MAX_VALUE, null, null);
 	}
 
 }

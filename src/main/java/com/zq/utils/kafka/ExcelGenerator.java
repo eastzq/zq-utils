@@ -1,9 +1,12 @@
 package com.zq.utils.kafka;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mysql.fabric.xmlrpc.base.Array;
 
 public class ExcelGenerator {
 
@@ -41,7 +46,6 @@ public class ExcelGenerator {
 			Row head = this.sheet.createRow(this.pageRowNo++);
 			Font font = workbook.createFont();
 			font.setFontHeightInPoints((short) 12);
-			font.setFontName("黑体");
 			font.setBoldweight(Font.BOLDWEIGHT_BOLD);
 			
 			CellStyle style = workbook.createCellStyle();
@@ -64,7 +68,7 @@ public class ExcelGenerator {
 		Row head = this.sheet.createRow(this.pageRowNo++);
 		for (int i = 0; i < this.columns.size(); i++) {
 			Font font = workbook.createFont();
-			font.setFontHeightInPoints((short) 30);
+			font.setFontHeightInPoints((short) 12);
 			font.setFontName("黑体");
 			font.setBoldweight(Font.BOLDWEIGHT_BOLD);
 			font.setFontHeightInPoints((short) 10);
@@ -173,5 +177,34 @@ public class ExcelGenerator {
 			fos.close();
 		}
 	}
-
+	
+	public static void genExcel(List<String> titles, List<String> columns, List<Map<String, Object>> data)
+			throws IOException {
+		ExcelGenerator gen = new ExcelGenerator();
+		gen.createTitles(titles);
+		gen.createColumns(columns);
+		gen.appendDataSet(data);
+		String path = "D:/test.xlsx";
+		File file = new File(path);
+		if (file.exists()) {
+			file.delete();
+		}
+		gen.write(path);
+	}
+	
+	public static void main(String[] args) throws IOException {
+		List<String> l = new ArrayList<String>();
+		l.add("1");
+		
+		List<String> c = new ArrayList<String>();
+		c.add("c1");
+		
+		List<Map<String,Object>> lm = new ArrayList<>();
+		
+		Map<String,Object> m = new HashMap<String, Object>();
+		m.put("c1", "1");
+		lm.add(m);
+		
+		genExcel(l, c, lm);
+	}
 }
