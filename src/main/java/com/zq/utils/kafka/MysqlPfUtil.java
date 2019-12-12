@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zq.utils.cli.ExecuteResult;
-import com.zq.utils.cli.ProcessBuilderCommandExecutorImpl;
+import com.zq.utils.cli.ProcessBuilderCommandExecutor;
 import com.zq.utils.cli.intf.CommandExecutor;
 
 public class MysqlPfUtil {
@@ -103,7 +103,7 @@ public class MysqlPfUtil {
 		FileUtils.writeStringToFile(sqlFile, t, "UTF-8");
 
 		String command = "mysql -h 10.168.0.196 -P 3307 -uroot -D test -proot <" + sqlFile.getPath();
-		CommandExecutor ce = new ProcessBuilderCommandExecutorImpl("GBK");
+		CommandExecutor ce = new ProcessBuilderCommandExecutor("GBK");
 		logger.debug("准备调用命令：{}", command);
 
 		ExecuteResult er = ce.executeCommand(command);

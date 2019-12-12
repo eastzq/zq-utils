@@ -22,39 +22,20 @@ import org.slf4j.LoggerFactory;
 
 import com.zq.utils.cli.intf.CommandExecutor;
 
-public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
+public class ProcessBuilderCommandExecutor extends BaseCommandExecutor {
 
-	public static final Logger logger = LoggerFactory.getLogger(ProcessBuilderCommandExecutorImpl.class);
-
-	public static final String cmdPrefix = "cmd";
-
-	public static boolean isWindows() {
-		String os = System.getProperty("os.name");
-		if (os.toLowerCase().startsWith("win")) {
-			return true;
-		}
-		return false;
-	}
-
-	public static ExecutorService pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 3L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
-
-	private String encoding = "UTF-8";
-
-	public ProcessBuilderCommandExecutorImpl(String encoding) {
-		if (StringUtils.isNoneBlank(encoding)) {
-			this.encoding = encoding;
-		}
-	}
+    public ProcessBuilderCommandExecutor() {
+    }
+    
+	public ProcessBuilderCommandExecutor(String encoding) {
+        super(encoding);
+    }
+    public static final Logger logger = LoggerFactory.getLogger(ProcessBuilderCommandExecutor.class);
 
 	@Override
 	public ExecuteResult executeCommand(String[] cmdarray, long timeout, String[] envp, File dir) {
-		String command = StringUtils.join(cmdarray, " ");
-		if (isWindows() && !command.contains(cmdPrefix)) {
-			command = cmdPrefix + " /c " + command;
-			String[] f = new String[] { cmdPrefix, "/c", };
-			cmdarray = RuntimeCommandExecutorImpl.concat(f, cmdarray);
-		}
+	    String command = StringUtils.join(cmdarray, " ");
+	    cmdarray = addWindowsCommandPrefix(cmdarray);
 		Process process = null;
 		InputStream pIn = null;
 		StreamGobbler outputGobbler = null;
@@ -90,19 +71,19 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 		} catch (IOException ex) {
 			String errorMessage = "The command [" + command + "] execute failed.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-999, "IO异常，原因：" + ex.getMessage());
+			return new ExecuteResult(ExecuteResult.exErrorCode, "IO异常，原因：" + ex.getMessage());
 		} catch (TimeoutException ex) {
 			String errorMessage = "The command [" + command + "] timed out.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-999, "命令执行超时，原因：" + ex.getMessage());
+			return new ExecuteResult(ExecuteResult.exErrorCode, "命令执行超时，原因：" + ex.getMessage());
 		} catch (ExecutionException ex) {
 			String errorMessage = "The command [" + command + "] did not complete due to an execution error.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-999, "执行命令异常：原因：" + ex.getMessage());
+			return new ExecuteResult(ExecuteResult.exErrorCode, "执行命令异常：原因：" + ex.getMessage());
 		} catch (InterruptedException ex) {
 			String errorMessage = "The command [" + command + "] did not complete due to an interrupted error.";
 			logger.error(errorMessage, ex);
-			return new ExecuteResult(-999, "中断异常：原因：" + ex.getMessage());
+			return new ExecuteResult(ExecuteResult.exErrorCode, "中断异常：原因：" + ex.getMessage());
 		} finally {
 			if (process != null) {
 				process.destroy();
@@ -115,7 +96,7 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 				}
 			}
 			if (pIn != null) {
-				this.closeQuietly(pIn);
+			    //this.closeQuietly(pIn); 不用显示关闭，如果destroy自然会关闭，否则windows下可能会阻塞在close上
 				if (outputGobbler != null && !outputGobbler.isInterrupted()) {
 					outputGobbler.interrupt();
 				}
@@ -123,19 +104,11 @@ public class ProcessBuilderCommandExecutorImpl implements CommandExecutor {
 		}
 	}
 
-	private void closeQuietly(Closeable c) {
-		try {
-			if (c != null) {
-				c.close();
-			}
-		} catch (IOException e) {
-			logger.error("exception", e);
-		}
-	}
+
 
 	@Override
 	public ExecuteResult executeCommand(String command, long timeout) {
-		return executeCommand(RuntimeCommandExecutorImpl.splitCommand(command), timeout, null, null);
+		return executeCommand(splitCommand(command), timeout, null, null);
 	}
 
 	@Override

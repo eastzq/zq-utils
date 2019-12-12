@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.zq.utils.cli.ExecuteResult;
-import com.zq.utils.cli.ProcessBuilderCommandExecutorImpl;
+import com.zq.utils.cli.ProcessBuilderCommandExecutor;
 import com.zq.utils.cli.intf.CommandExecutor;
 
 public class RuntimeUtils2 {
@@ -34,7 +34,7 @@ public class RuntimeUtils2 {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		CommandExecutor ec = new ProcessBuilderCommandExecutorImpl("GBK");
+		CommandExecutor ec = new ProcessBuilderCommandExecutor("GBK");
 		ExecuteResult er = ec.executeCommand("git st", 1000);
 		logger.debug(er.getExecuteOut());
 		logger.debug("执行结果打印：{}", JSON.toJSONString(er));

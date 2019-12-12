@@ -30,6 +30,8 @@ public class PerfUtil {
 	public static String rawFilter = "(总计total|globalMsgSplitConfig|readDbf|sendMsg|operateRule|operateBcp|operateRedis|consumeMsg|loadBcp).*\\[.*\\]";
 
 	public static String totalRegex = "总计total_.*\\[(?<value>.*)\\]";
+	
+	public static String spRule  = "^(?![import|pacakge]).*com.github.simpledatax";
 
 	public static final int ADVICE_NUM = 8;
 
