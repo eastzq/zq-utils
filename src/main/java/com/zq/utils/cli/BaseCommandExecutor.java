@@ -39,7 +39,6 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
     public String[] addWindowsCommandPrefix(String[] cmdarray) {
         String command = StringUtils.join(cmdarray, " ");
         if (isWindows() && !command.contains(cmdPrefix)) {
-            command = cmdPrefix + " /c " + command;
             String[] f = new String[] { cmdPrefix, "/c", };
             cmdarray = concat(f, cmdarray);
         }
