@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -17,8 +19,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
-  * excel转sql脚本工具类。
+ * excel转sql脚本工具类。
+ * 
  * @author zq
  *
  */
@@ -26,7 +30,7 @@ public class ExcelRuleReader {
 
     private static final String EXCEL_XLS = "xls";
     private static final String EXCEL_XLSX = "xlsx";
-    private static String DIR = "C:\\Users\\86134\\Desktop\\excel配置表";
+    private static String DIR = "C:\\Users\\86134\\Desktop\\excel配置表2";
 
     private static final Logger logger = LoggerFactory.getLogger(ExcelRuleReader.class);
 
@@ -69,14 +73,14 @@ public class ExcelRuleReader {
      */
     public static void main(String[] args) throws Exception {
         File excelDir = new File(DIR); // 创建文件对象
-        String resultFilePath = excelDir+File.separator+"result.sql";
+        String resultFilePath = excelDir + File.separator + "result.sql";
         if (!excelDir.exists() || !excelDir.isDirectory()) {
             return;
         }
         File resultFile = new File(resultFilePath);
-        if(resultFile.exists()&& resultFile.delete()) {
+        if (resultFile.exists() && resultFile.delete()) {
         }
-        
+
         File[] files = excelDir.listFiles();
         List<File> targetFiles = new ArrayList<>();
         for (File f : files) {
@@ -90,10 +94,8 @@ public class ExcelRuleReader {
                 String tableName = getFileName(file);
                 fis = new FileInputStream(file);
                 Workbook workbook = getWorkbok(fis, file);
-                Sheet tsheet = workbook.getSheetAt(0);
-                Row columnRow = tsheet.getRow(0);
-                int columnTotalNum = columnRow.getLastCellNum();
                 String columnStr = getColumnString(workbook);
+                String[] columns = StringUtils.split(columnStr, ",");
                 String prefix = "INSERT INTO " + tableName + "(" + columnStr + ")\n";
                 String sufix = "\n\n\n\n";
                 int sheetCount = workbook.getNumberOfSheets();
@@ -105,8 +107,8 @@ public class ExcelRuleReader {
                         if (row.getCell(0) == null) {
                             break;
                         }
-                        List<String> t = new ArrayList<>();
-                        for (int j = 0; j < columnTotalNum; j++) {
+                        Map<String, Object> m = new HashMap<>();
+                        for (int j = 0; j < columns.length; j++) {
                             Object obj = null;
                             Cell cell = row.getCell(j);
                             if (cell == null) {
@@ -114,11 +116,17 @@ public class ExcelRuleReader {
                             } else {
                                 obj = getValue(cell);
                             }
-                            t.add("'" + obj.toString().trim() + "'");
+                            m.put(columns[j], obj.toString().trim());
+                        }
+                        wrap(m);
+                        List<String> t = new ArrayList<>();
+                        for (int j = 0; j < columns.length; j++) {
+                            Object obj = m.get(columns[j]);
+                            t.add("'" + obj.toString() + "'");
                         }
                         all.add(" SELECT " + StringUtils.join(t, ",") + " FROM DUAL ");
                     }
-                    operate(resultFilePath,prefix + StringUtils.join(all, "\n UNION ALL")+sufix);
+                    operate(resultFilePath, prefix + StringUtils.join(all, "\n UNION ALL") + sufix);
                 }
             } finally {
                 fis.close();
@@ -129,6 +137,20 @@ public class ExcelRuleReader {
     public static String getFileName(File file) {
         String name = file.getName();
         return name.substring(0, name.lastIndexOf("."));
+    }
+
+    public static Map<String, Object> wrap(Map<String, Object> m) {
+        String t = (String) m.get("RULE_CONTENT");
+        String n = (String) m.get("RULE_RESULT_ITEM");
+        String vs = null;
+        if (t.startsWith("return")) {
+            vs = t.substring("return".length()+1,t.length()-1);
+            vs ="setValue(\""+n+"\","+vs+");";
+        }else {
+            vs = t;
+        }
+        m.put("RULE_CONTENT", vs);
+        return m;
     }
 
     private static Object getValue(Cell cell) {
@@ -142,6 +164,7 @@ public class ExcelRuleReader {
             break;
         case Cell.CELL_TYPE_NUMERIC:
             obj = cell.getNumericCellValue();
+            obj = ((Double) obj).intValue();
             break;
         case Cell.CELL_TYPE_STRING:
             String t = cell.getStringCellValue();
