@@ -1,4 +1,4 @@
-package com.zq.utils.kafka;
+package com.zq.utils.kafka.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

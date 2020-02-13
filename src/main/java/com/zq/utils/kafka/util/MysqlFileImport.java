@@ -1,4 +1,4 @@
-package com.zq.utils.kafka;
+package com.zq.utils.kafka.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +25,7 @@ import com.zq.utils.cli.ExecuteResult;
 import com.zq.utils.cli.ProcessBuilderCommandExecutor;
 import com.zq.utils.cli.intf.CommandExecutor;
 
-public class MysqlPfUtil {
+public class MysqlFileImport {
 
 	public static final String PATH = "/data/clear/bcpFile";
 	public static final String TEMP_SQL_PATH = "/data/clear/bcpFile/sqlFile";
@@ -38,7 +38,7 @@ public class MysqlPfUtil {
 	public static final String FAIL_DIR = "failDir";
 	public static final String SQL_DIR = "sqlDir";
 
-	private static final Logger logger = LoggerFactory.getLogger(MysqlPfUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(MysqlFileImport.class);
 
 	public static ExecutorService bcpLoadThreadPool = (ExecutorService) Executors.newFixedThreadPool(adviceNum);
 

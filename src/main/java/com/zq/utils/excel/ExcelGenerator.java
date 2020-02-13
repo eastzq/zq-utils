@@ -1,4 +1,4 @@
-package com.zq.utils.kafka;
+package com.zq.utils.excel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,8 +20,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mysql.fabric.xmlrpc.base.Array;
 
 public class ExcelGenerator {
 
