@@ -45,6 +45,13 @@
 			<version>1.2.17</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>3.0.9</version>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml -->
 		<dependency>
 			<groupId>net.sourceforge.plantuml</groupId>
@@ -102,11 +109,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>mondrian</artifactId>
-			<version>8.3.0.0-R</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
@@ -133,16 +135,25 @@
 			<version>2.7.6</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.ignite</groupId>
-		    <artifactId>ignite-indexing</artifactId>
-		    <version>2.7.6</version>
+			<groupId>org.apache.ignite</groupId>
+			<artifactId>ignite-indexing</artifactId>
+			<version>2.7.6</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.ignite</groupId>
-		    <artifactId>ignite-slf4j</artifactId>
-		    <version>2.7.6</version>
+			<groupId>org.apache.ignite</groupId>
+			<artifactId>ignite-slf4j</artifactId>
+			<version>2.7.6</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>reflectasm</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.javacsv</groupId>
+			<artifactId>javacsv</artifactId>
+			<version>2.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
