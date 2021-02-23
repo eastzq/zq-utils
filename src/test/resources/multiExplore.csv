@@ -1,0 +1,72 @@
+﻿id,keyRule,excludeRule,ruleScope,advice,fixRule,fileType,isUse
+1,,/public\.jsp,file,所有界面都需要引入public.jsp,,jsp,0
+2,<\s*fieldset.*?height,,line,fieldset不要设置高度,,jsp,0
+2,<\s*table.*form-table,<\s*table.*sfe-form,line,"所有表单相关的<table>标签，需要添加类名sfe-form,<table class=""form-table sfe-form""></table>",,jsp,0
+3,<\s*td.*\s+align\s*,,line,"修改为<td colspan=""2"" style=""padding-left:38px;text-align:left;"">",,jsp,0
+3,<.*\s+valign\s*,,line,"修改为 <td colspan=""2"" style=""vertical-align:top;"">",,jsp,0
+3,<\s*xml,,line,"查找<xml>标签将原先<xml>的写法改成用hidden的input，例如
+jsp中：
+<xml id=""intfxml"">
+<%=request.getAttribute(""intfxml"")%>
+</xml>
+对应的js中取值：
+var intfxml = $(""intfxml"").xml;
+改成
+jsp中：
+<input type=""hidden"" id=""intfxml"" value=""<%=String.valueOf(request.getAttribute(""intfxml"")).replace(""<"", ""&lt;"").replace(""\"""", ""&quot;"") %>"" />
+对应的js中取值：
+var intfxml = sfe.getElementByAllItem(""intfxml"").value;",,jsp,0
+3,behavior.*/ESIM/jsp/.*\.htc,(/\*.*|//.*),line,"界面上用到结算机构弹出树选择窗口时，即settledeptselected/settledeptselected/checklist.htc的更改方案
+.querySelectTree {
+	behavior: url ('/ESIM/jsp/epub/settledeptselected/settledeptselected/checklist.htc' );
+    .....
+}
+修改为
+.querySelectTree {
+	/*behavior: url ('/ESIM/jsp/epub/settledeptselected/settledeptselected/checklist.htc' );*/
+	behavior: url(/ECOMM/htc/property.htc);
+    .....
+}
+并在当前界面同名的js资源之前引入
+<script language=""javascript"" src=""/ESIM/jsp/epub/settledeptselected/settledeptselected/SettleDeptCheckListPlugin.js"" type=""text/javascript""></script>",,jsp,1
+5,\s+document\.all\.item,,line,写法改成sfe.getElementByAllItem(),,js,0
+6,\s+document\.getElementById,,line,写法改成sfe.getElementByAllItem(),,js,0
+7,lFuncDocumentReady,,line,"在 lFuncDocumentReady 函数里添加if (document.readyState == ""complete"")",,js,0
+8,document\.onreadystatechange,,line,document.onreadystatechange=xxx改成sfe.ready(xxx),,js,0
+9,\.rows\(\w+\),,line,rows()的形式更改为rows[]形式,,js,0
+10,\.cells\(\w+\),,line,cells()的形式更改为cells[]形式,,js,0
+11,\.children\(\w+\),,line,children()的形式更改为children[]形式,,js,0
+12,\.childNodes,,line,childNodes更改为children,,js,0
+12,window\.event,,line,"event写法改成封装的sfe.getEvent(), e = window.event ==> e = sfe.getEvent();",,js,0
+13,event\.srcElement,,line,event.srcElement改成sfe.getEventSrcElement(),,js,0
+14,event\.returnValue.*false,,line,event.returnValue=false改成sfe.setReturnValueFalse(),,js,0
+15,event\.cancelBubble.*true,,line,event.cancelBubble = true; 改为 sfe.setCancelBubble(),,js,0
+16,event\.keyCode,,line,event.keyCode  ==> 此处event使用的是全局对象，需经过sfe.getEvent()获取,,js,0
+17,node\.firstChild,,line,node.firstChild 改成 sfe.getFirstChild(node),,js,0
+18,node\.lastChild,,line,node.lastChild 改成 sfe. getFirstChild(node),,js,0
+19,node\.previousSibling,,line,node.previousSibling 改成 sfe.getPrevNode(node),,js,0
+20,node\.nextSibling,,line,node.nextSibling 改成 sfe.getNextNode(node),,js,0
+21,\.document\.all\.item,,line,.document.all.item改为sfe.getRangeElementByAllItem(),,js,0
+22,\.document\.getElementById,,line,.document.getElementById写法改成 sfe.getRangeElementByAllItem(),,js,0
+22,\.attachEvent,sfe\.attachEvent,line,"attachEvent 改成 sfe.attachEvent(e,name, method)",,js,0
+23,\.datachEvent,sfe\.attachEvent,line,"datachEvent 改成 sfe.datachEvent(e,name, method)",,js,0
+24,window\.showModalDialog,,line,"window.showModalDialog替换为sfe.showModalDialog
+如果有返回值,例如：
+function putInfoFromSubWindow(ret){
+if(ret == '1'){
+$('BUTTON_NAME').value = $('action').value = '';
+xfe.encryt.signform(document.forms[0]);
+document.forms[0].submit();
+}
+}
+var ret = window.showModalDialog(url,settings,feature);
+putInfoFromSubWindow(ret);
+修改为
+var rest = sfe.showModalDialog(url,settings,features, putInfoFromSubWindow);",,js,0
+25,ActiveXObject.*XMLHTTP,,line,"new ActiveXObject(""Microsoft.XMLHTTP"") 改成 sfe.getXMLHttp()",,js,0
+26,ActiveXObject.*XMLDOM,,line,"new ActiveXObject(""Microsoft.XMLDOM"") 改成 sfe.createXMLDOM()",,js,0
+27,\.lastChild\.appendChild,,line,.lastChild.appendChild 改为 sfe.getLastChild,,js,0
+28,oXml\.documentElement\.selectNodes,,line,"rows = oXml.documentElement.selectNodes(""//Result/Rs/Rows/Row""); 修改为 rows = $lq(""Result>Rs>Rows>Row"", oXml)",,js,0
+28,\.lastChild\.appendChild,,line,".lastChild.appendChild 改为 sfe.getLastChild 例如  
+oRow.parentElement.parentElement.lastChild.appendChild(tmp_tr); 
+改为  sfe.getLastChild(oRow.parentElement.parentElement).appendChild(tmp_tr);",,js,0

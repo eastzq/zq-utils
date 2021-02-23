@@ -30,7 +30,7 @@ public class MultiExplorer {
 
     }
 
-    private String svnBasePath = "C:\\Users\\zq\\Desktop\\多浏览器\\webbase.esim.jsp";
+    private String svnBasePath = "C:\\Users\\zq\\Desktop\\多浏览器\\ECTMS_FILE\\jsp";
 
     List<Map<String, Object>> todoList;
     List<Rule> rules;

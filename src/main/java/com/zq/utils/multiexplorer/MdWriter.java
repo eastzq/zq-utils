@@ -37,10 +37,11 @@ public class MdWriter {
         file.createNewFile();
         for (Map<String, Object> m : data) {
             String path = (String) m.get("filePath");
-            path = "#### " + path + "";
+            String titlepath = "#### " + path + "\n";
+            titlepath += "["+path+"](file://"+path+")\n";
             String checkResult = (String) m.get("checkResult") + "\n\n";
             if (StringUtils.isNotBlank(checkResult)) {
-                FileUtils.write(file, path, true);
+                FileUtils.write(file, titlepath, true);
                 FileUtils.write(file, checkResult, true);
             }
         }
