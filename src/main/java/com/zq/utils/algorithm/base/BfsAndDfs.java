@@ -47,7 +47,7 @@ public class BfsAndDfs {
     public void dfs(File dir) {
         LinkedList<File> stack = new LinkedList<>();
         stack.push(dir);
-        while (stack.peek() != null) {
+        while (!stack.isEmpty()) {
             File f = stack.pop();
             System.out.println(f.getName());
             if (f.isDirectory()) {
@@ -74,7 +74,7 @@ public class BfsAndDfs {
     public void bfs(File dir) {
         LinkedList<File> queue = new LinkedList<>();
         queue.add(dir);
-        while (queue.peek() != null) {
+        while (!queue.isEmpty()) {
             File f = queue.removeLast();
             System.out.println(f.getName());
             if (f.isDirectory()) {
