@@ -7,9 +7,11 @@
  * @Copyright 
  */
 
-package com.zq.utils.jdk;
+package com.zq.utils.algorithm.base;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @Description
@@ -42,12 +44,19 @@ public class Tree {
         }
     }
 
-    // 二叉树遍历
-    // A
-    // / \
-    // B C
-    // / \
-    // D E
+    /**
+     * 二叉树遍历
+     * @Description   
+     *      A
+     *     / \
+     *    B   C
+     *   / \
+     *  D   E
+     * @return void 
+     * @author zq
+     * @date 2021年3月30日 下午8:57:33
+     * @see
+     */
     public static void main(String[] args) {
         Node E = new Node("E", null, null);
         Node D = new Node("D", null, null);
@@ -83,7 +92,6 @@ public class Tree {
             node.print();
             inorderTraversal(node.right);
         }
-
     }
 
     // 后续遍历
@@ -96,19 +104,19 @@ public class Tree {
         }
     }
 
-    // 深度优先算法，遍历文件树为例。
-    public void dfs(File dir) {
-        System.out.println(dir.getName());
+    // 深度优先算法，遍历文件树为例。递归实现
+    public void dfs1(File dir) {
+        // System.out.println(dir.getName());
         File[] files = dir.listFiles();
         for (File file : files) {
             if (dir.isDirectory()) {
-                dfs(file);
+                dfs1(file);
             } else {
                 System.out.println(file.getName());
             }
         }
     }
-    public void bfs(File dir) {
-        
-    }
+    
+    
+
 }

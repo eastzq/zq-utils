@@ -7,7 +7,7 @@
  * @Copyright 
  */
 
-package com.zq.utils.jdk;
+package com.zq.utils.algorithm.base;
 
 /**
  * @Description 
@@ -25,13 +25,21 @@ package com.zq.utils.jdk;
  * @see
  * @since 2021年3月25日 下午6:57:32
  */
-public class Main {
+public class PrintBytes {
 
-    public Main() {
+    public PrintBytes() {
     }
-
+    
+    /**
+     * print 打印字节
+     * @Description
+     * @return void 
+     * @author zq
+     * @date 2021年3月30日 下午8:59:21
+     * @see
+     */
     public static void main(String[] args) {
-       System.out.println(new Main().solution("-1"));
+       System.out.println(new PrintBytes().solution("-1"));
     }
     public String solution(String t) {
         try {

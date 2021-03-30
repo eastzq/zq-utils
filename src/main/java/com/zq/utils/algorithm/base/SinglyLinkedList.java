@@ -9,8 +9,6 @@
 
 package com.zq.utils.algorithm.base;
 
-import org.apache.kafka.common.errors.IllegalSaslStateException;
-
 /**
  * @Description 
  * @author zq
