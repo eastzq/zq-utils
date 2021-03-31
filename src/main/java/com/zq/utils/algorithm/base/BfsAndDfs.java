@@ -20,11 +20,11 @@ import java.util.Queue;
  * @see
  * @since 2021年3月25日 下午7:01:54
  * 
- *        二叉树 Binary tree 满二叉树 Full binary tree 完全二叉树 Complete binary tree
- *        二叉排序树 Binary sort tree 二叉搜索树 Binary search tree
- *        前序遍历 Preorder traversal 中序遍历 Inorder traversal
- *        后序遍历 Postorder traversal 哈夫曼树 Huffman tree 深度优先索引 Depth-First Search
- *        广度优先索引 Breath-First Search
+ *        二叉树Binarytree 满二叉树Fullbinarytree 完全二叉树Completebinarytree
+ *        二叉排序树Binarysorttree 二叉搜索树Binarysearchtree
+ *        前序遍历Preordertraversal 中序遍历Inordertraversal
+ *        后序遍历Postordertraversal 哈夫曼树Huffmantree 深度优先索引Depth-FirstSearch
+ *        广度优先索引Breath-FirstSearch
  */
 
 public class BfsAndDfs {
