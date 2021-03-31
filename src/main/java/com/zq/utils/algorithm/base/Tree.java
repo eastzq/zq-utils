@@ -56,6 +56,10 @@ public class Tree {
      * @author zq
      * @date 2021年3月30日 下午8:57:33
      * @see
+     * 
+     * 前 ABDEC
+     * 中 DBEAC
+     * 后 DEBCA
      */
     public static void main(String[] args) {
         Node E = new Node("E", null, null);
@@ -104,7 +108,7 @@ public class Tree {
         }
     }
 
-    // 深度优先算法，遍历文件树为例。递归实现
+    // 深度优先算法，遍历文件树为例。递归实现，类似前序遍历。
     public void dfs1(File dir) {
         // System.out.println(dir.getName());
         File[] files = dir.listFiles();
