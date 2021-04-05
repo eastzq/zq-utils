@@ -51,6 +51,11 @@
 			<version>3.0.9</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-example</artifactId>
+			<version>4.1.63.Final</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml -->
 		<dependency>
