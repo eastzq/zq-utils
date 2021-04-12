@@ -29,7 +29,7 @@ public class ChannelHandler implements CompletionHandler<Integer, Attachment> {
             // 到这里，说明往客户端写数据也结束了，有以下两种选择:
             // 1. 继续等待客户端发送新的数据过来
 //            att.setReadMode(true);
-//            att.getBuffer().clear();
+//            att.getBuffer().clear();EchoClient
 //            att.getClient().read(att.getBuffer(), att, this);
             // 2. 既然服务端已经返回数据给客户端，断开这次的连接
             try {
